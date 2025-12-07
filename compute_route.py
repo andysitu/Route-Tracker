@@ -13,18 +13,28 @@ from google.maps.routing_v2.types import (
 from google.type.latlng_pb2 import LatLng
 from google.protobuf.field_mask_pb2 import FieldMask
 
+
 load_dotenv()
 
-async def compute_route():
+
+async def compute_route(
+    addresses: list[str] | None = None, latlangs: list[float] | None = None
+):
     if not os.environ.get("GOOGLE_API_KEY"):
         raise ValueError("API KEY NOT FOUND IN ENV FILE")
 
     async with RoutesAsyncClient() as client:
-        origin_latlng = LatLng(latitude=34.0522, longitude=-118.2437)
-        destination_latlng = LatLng(latitude=34.0040, longitude=-118.4973)
+        if len(addresses) >= 2:
+            origin = Waypoint(address=addresses[0])
+            destination = Waypoint(address=addresses[1])
+        elif len(latlangs) >= 4:
+            origin_latlng = LatLng(latitude=latlangs[0], longitude=latlangs[1])
+            destination_latlng = LatLng(latitude=latlangs[2], longitude=latlangs[3])
 
-        origin = Waypoint(location=Location(lat_lng=origin_latlng))
-        destination = Waypoint(location=Location(lat_lng=destination_latlng))
+            origin = Waypoint(location=Location(lat_lng=origin_latlng))
+            destination = Waypoint(location=Location(lat_lng=destination_latlng))
+        else:
+            raise ValueError("Incorrect parameters provided to compute_route")
 
         request = ComputeRoutesRequest(
             origin=origin,
