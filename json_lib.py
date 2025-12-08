@@ -6,7 +6,9 @@ def save_json(json_str, folder_path: str, filename: str):
     # Make sure the folder exists
     os.makedirs(folder_path, exist_ok=True)
 
+    filepath = os.path.join(folder_path, filename)
+
     python_data = json.loads(json_str)
 
-    with open(filename, "w") as f:
-        json.dump(python_data, f, indent=2)
+    with open(filepath, "w") as file:
+        json.dump(python_data, file, indent=2)
