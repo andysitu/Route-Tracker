@@ -1,5 +1,4 @@
 import os
-import asyncio
 from dotenv import load_dotenv
 
 from google.maps.routing_v2 import RoutesAsyncClient
@@ -17,8 +16,16 @@ from google.protobuf.field_mask_pb2 import FieldMask
 load_dotenv()
 
 
+# paths = [
+#     "routes.duration",
+#     "routes.distance_meters",
+#     "routes.polyline.encoded_polyline",
+#     "geocodingResults",
+# ]
 async def compute_route(
-    addresses: list[str] | None = None, latlangs: list[float] | None = None
+    addresses: list[str] | None = None,
+    latlangs: list[float] | None = None,
+    paths: list[str] | None = None,
 ):
     if not os.environ.get("GOOGLE_API_KEY"):
         raise ValueError("API KEY NOT FOUND IN ENV FILE")
@@ -43,15 +50,11 @@ async def compute_route(
             routing_preference=RoutingPreference.TRAFFIC_AWARE_OPTIMAL,
         )
 
-        paths = [
-            "routes.duration",
-            "routes.distance_meters",
-            "routes.polyline.encoded_polyline",
-            "geocodingResults",
-        ]
-        field_mask = FieldMask(paths=paths)
-        # mask_string = ",".join(paths)
-        mask_string = "*"
+        if paths:
+            field_mask = FieldMask(paths=paths)
+            mask_string = ",".join(paths)
+        else:
+            mask_string = "*"
 
         try:
             response = await client.compute_routes(
@@ -59,20 +62,11 @@ async def compute_route(
             )
 
             if response.routes:
-
-                # response_json = json_format.MessageToJson(
-                #     response.routes[0],
-                #     indent=2,  # Use indent=2 for nicely formatted, readable output
-                # )
                 response_json = type(response).to_json(response)
 
-                print("-------- ROUTES API RESPONSE (JSON) --------")
-                print(response_json)
+                return response_json
             else:
                 print("No routes found")
 
         except Exception as ex:
             print(f"An error occurred: {ex}")
-
-if __name__ == "__main__":
-    asyncio.run(compute_route())
