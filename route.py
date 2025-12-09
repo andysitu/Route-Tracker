@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+import json
 
 from google.maps.routing_v2 import RoutesAsyncClient
 from google.maps.routing_v2.types import (
@@ -62,7 +63,8 @@ async def compute_route(
             )
 
             if response.routes:
-                response_json = type(response).to_json(response)
+                response_json_str = type(response).to_json(response)
+                response_json = json.loads(response_json_str)
 
                 return response_json
             else:
