@@ -1,6 +1,8 @@
 import os
 from dotenv import load_dotenv
 import json
+import json_lib
+import datetime
 
 from google.maps.routing_v2 import RoutesAsyncClient
 from google.maps.routing_v2.types import (
@@ -86,3 +88,27 @@ async def compute_route(
 
         except Exception as ex:
             print(f"An error occurred: {ex}")
+
+
+async def save_route_by_address(
+    addresses: list[str],
+):
+    response = await compute_route(addresses)
+
+    current = datetime.datetime.now()
+    formatted_name = current.strftime("%Y%m%d_%H%M%S")
+    dateString = formatted_name.split("_")[0]
+
+    if response:
+        json_lib.save_json(response, f"data/{dateString}", f"{formatted_name}.json")
+
+
+async def save_route_by_address(latlangs: list[float]):
+    response = await compute_route(latlangs=latlangs)
+
+    current = datetime.datetime.now()
+    formatted_name = current.strftime("%Y%m%d_%H%M%S")
+    dateString = formatted_name.split("_")[0]
+
+    if response:
+        json_lib.save_json(response, f"data/{dateString}", f"{formatted_name}.json")
