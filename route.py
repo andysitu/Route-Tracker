@@ -32,15 +32,28 @@ async def compute_route(
         raise ValueError("API KEY NOT FOUND IN ENV FILE")
 
     async with RoutesAsyncClient() as client:
+        location = {}
         if len(addresses) >= 2:
             origin = Waypoint(address=addresses[0])
             destination = Waypoint(address=addresses[1])
+
+            location = {
+                "origin": {
+                    "address": addresses[0],
+                },
+                "destination": {"address": addresses[1]},
+            }
         elif len(latlangs) >= 4:
             origin_latlng = LatLng(latitude=latlangs[0], longitude=latlangs[1])
             destination_latlng = LatLng(latitude=latlangs[2], longitude=latlangs[3])
 
             origin = Waypoint(location=Location(lat_lng=origin_latlng))
             destination = Waypoint(location=Location(lat_lng=destination_latlng))
+
+            location = {
+                "origin": {"coordinates": [latlangs[0], latlangs[1]]},
+                "destination": {"coordinates": [latlangs[2], latlangs[3]]},
+            }
         else:
             raise ValueError("Incorrect parameters provided to compute_route")
 
@@ -65,6 +78,7 @@ async def compute_route(
             if response.routes:
                 response_json_str = type(response).to_json(response)
                 response_json = json.loads(response_json_str)
+                response_json["location"] = location
 
                 return response_json
             else:
