@@ -103,7 +103,7 @@ async def save_route_by_address(
         json_lib.save_json(response, f"data/{dateString}", f"{formatted_name}.json")
 
 
-async def save_route_by_address(latlangs: list[float]):
+async def save_route_by_coordinates(latlangs: list[float]):
     response = await compute_route(latlangs=latlangs)
 
     current = datetime.datetime.now()
