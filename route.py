@@ -35,7 +35,7 @@ async def compute_route(
 
     async with RoutesAsyncClient() as client:
         location = {}
-        if len(addresses) >= 2:
+        if addresses and len(addresses) >= 2:
             origin = Waypoint(address=addresses[0])
             destination = Waypoint(address=addresses[1])
 
@@ -45,7 +45,7 @@ async def compute_route(
                 },
                 "destination": {"address": addresses[1]},
             }
-        elif len(latlangs) >= 4:
+        elif latlangs and len(latlangs) >= 4:
             origin_latlng = LatLng(latitude=latlangs[0], longitude=latlangs[1])
             destination_latlng = LatLng(latitude=latlangs[2], longitude=latlangs[3])
 
@@ -93,7 +93,7 @@ async def compute_route(
 async def save_route_by_address(
     addresses: list[str],
 ):
-    response = await compute_route(addresses)
+    response = await compute_route(addresses=addresses)
 
     current = datetime.datetime.now()
     formatted_name = current.strftime("%Y%m%d_%H%M%S")
@@ -101,6 +101,7 @@ async def save_route_by_address(
 
     if response:
         json_lib.save_json(response, f"data/{dateString}", f"{formatted_name}.json")
+    return response
 
 
 async def save_route_by_coordinates(latlangs: list[float]):
