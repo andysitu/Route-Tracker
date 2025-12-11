@@ -19,12 +19,17 @@ from google.protobuf.field_mask_pb2 import FieldMask
 load_dotenv()
 
 
-def getDateFilename():
+def getDateNames():
     current = datetime.datetime.now()
-    formatted_name = current.strftime("%Y%m%d_%H%M%S")
-    dateString = formatted_name.split("_")[0]
-    timeString = formatted_name.split("_")[1]
-    return formatted_name, dateString, timeString
+    formatted_date_name = current.strftime("%Y%m%d_%H%M%S")
+    date_string = formatted_date_name.split("_")[0]
+    time_string = formatted_date_name.split("_")[1]
+    return formatted_date_name, date_string, time_string
+
+
+def getFolderpath():
+    _, dateString, _ = getDateNames()
+    return f"data/{dateString}"
 
 
 # paths = [
@@ -98,23 +103,27 @@ async def compute_route(
             print(f"An error occurred: {ex}")
 
 
+def save_response_to_file(response):
+    formatted_date_name, _, _ = getDateNames()
+    if response:
+        formatted_date_name, date_string, time_string = getDateNames()
+        response["file"] = {
+            "formatted_date_name": formatted_date_name,
+            "date_string": date_string,
+            "time_string": time_string,
+        }
+
+        json_lib.save_json(response, getFolderpath(), f"{formatted_date_name}.json")
+    return response
+
+
 async def save_route_by_address(
     addresses: list[str],
 ):
     response = await compute_route(addresses=addresses)
-    formatted_name, dateString, _ = getDateFilename()
-
-    if response:
-        json_lib.save_json(response, f"data/{dateString}", f"{formatted_name}.json")
-    return response
+    return save_response_to_file(response)
 
 
 async def save_route_by_coordinates(latlangs: list[float]):
     response = await compute_route(latlangs=latlangs)
-
-    current = datetime.datetime.now()
-    formatted_name = current.strftime("%Y%m%d_%H%M%S")
-    dateString = formatted_name.split("_")[0]
-
-    if response:
-        json_lib.save_json(response, f"data/{dateString}", f"{formatted_name}.json")
+    return save_response_to_file(response)
