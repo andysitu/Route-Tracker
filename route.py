@@ -19,6 +19,14 @@ from google.protobuf.field_mask_pb2 import FieldMask
 load_dotenv()
 
 
+def getDateFilename():
+    current = datetime.datetime.now()
+    formatted_name = current.strftime("%Y%m%d_%H%M%S")
+    dateString = formatted_name.split("_")[0]
+    timeString = formatted_name.split("_")[1]
+    return formatted_name, dateString, timeString
+
+
 # paths = [
 #     "routes.duration",
 #     "routes.distance_meters",
@@ -94,10 +102,7 @@ async def save_route_by_address(
     addresses: list[str],
 ):
     response = await compute_route(addresses=addresses)
-
-    current = datetime.datetime.now()
-    formatted_name = current.strftime("%Y%m%d_%H%M%S")
-    dateString = formatted_name.split("_")[0]
+    formatted_name, dateString, _ = getDateFilename()
 
     if response:
         json_lib.save_json(response, f"data/{dateString}", f"{formatted_name}.json")
