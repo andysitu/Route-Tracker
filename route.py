@@ -127,3 +127,7 @@ async def save_route_by_address(
 async def save_route_by_coordinates(latlangs: list[float]):
     response = await compute_route(latlangs=latlangs)
     return save_response_to_file(response)
+
+
+def get_encoded_polyline(response):
+    return response["routes"][0]["polyline"]["encodedPolyline"]
