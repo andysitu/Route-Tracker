@@ -1,5 +1,6 @@
 import httpx
 import os
+import route
 
 
 async def download_image(encoded_polyline):
@@ -20,3 +21,14 @@ async def download_image(encoded_polyline):
             print(f"Response content: {e.response.text}")
         except httpx.RequestError as e:
             print(f"An error occurred while requesting the map: {e}")
+
+
+def save_image(response, formatted_date_name):
+    if response.status_code == 200:
+
+        folder_path = route.getFolderpath()
+
+        filepath = os.path.join(folder_path, f"{formatted_date_name}.png")
+
+        with open(filepath, "wb") as file:
+            file.write(response.content)
