@@ -15,6 +15,11 @@ class scheduler:
         end: datetime,
         frequency: int = 60,
     ) -> None:
+        if start > end:
+            raise ValueError("Start date cannot be greater than the end date")
+        elif frequency <= 0:
+            raise ValueError("Frequency cannot be zero or negative")
+
         new_job = {
             "method": methodToRun,
             "days": day_of_week,
