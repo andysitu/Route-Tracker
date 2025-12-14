@@ -3,7 +3,7 @@ import datetime
 from typing import Callable, List
 
 
-class scheduler:
+class Scheduler:
     def __init__(self):
         self.jobs: List = []
 
