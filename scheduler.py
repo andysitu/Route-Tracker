@@ -1,13 +1,14 @@
 import time
 import datetime
-from typing import Callable, List
+from typing import Callable, Dict, List
 
 
 class Scheduler:
     def __init__(self):
-        self.jobs: List = []
+        self.jobs: Dict = {}
+        self._current_id: int = 0
 
-    def add_scheduler(
+    def add_job(
         self,
         methodToRun: Callable,
         day_of_week: List[int],
@@ -29,4 +30,9 @@ class Scheduler:
             "end": end,
             "frequency": frequency,
         }
-        self.jobs.append(new_job)
+        self.jobs[self.current_id] = new_job
+        self.current_id += 1
+
+    def remove_job(self, id: int):
+        if int in self.jobs:
+            del self.jobs[id]
