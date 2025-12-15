@@ -15,24 +15,24 @@ class Scheduler:
     def add_job(
         self,
         methodToRun: Callable,
-        day_of_week: List[int],
-        start: datetime,
-        end: datetime,
-        frequency: int = 1,  # integer per minute frequency
+        days_of_week: List[int],
+        start_hour: int,
+        end_hour: int,
+        min_frequency: int = 1,  # integer per minute frequency
     ) -> None:
-        if start > end:
+        if start_hour > start_hour:
             raise ValueError("Start date cannot be greater than the end date")
-        elif frequency < 0:
+        elif min_frequency < 0:
             # Minute accuracy
             # Scheduling might not be accurate enough under a minute
             raise ValueError("Frequency cannot be less than 1")
 
         new_job = {
             "method": methodToRun,
-            "days": day_of_week,
-            "start": start,
-            "end": end,
-            "frequency": frequency,
+            "days_of_week": days_of_week,
+            "start_hour": start_hour,
+            "end_hour": end_hour,
+            "frequency": min_frequency,
         }
         self.jobs[self.current_id] = new_job
         self.current_id += 1
