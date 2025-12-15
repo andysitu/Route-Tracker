@@ -1,12 +1,16 @@
 import time
 import datetime
 from typing import Callable, Dict, List
+import inspect
 
 
 class Scheduler:
     def __init__(self):
         self.jobs: Dict = {}
         self._current_id: int = 0
+
+    def is_func_async(method):
+        return inspect.iscoroutinefunction(method)
 
     def add_job(
         self,
