@@ -40,3 +40,29 @@ class Scheduler:
     def remove_job(self, id: int):
         if int in self.jobs:
             del self.jobs[id]
+
+    async def run(self):
+        while True:
+            now = datetime.datetime.now()
+
+            for job in self.jobs.values():
+                start_hour = job["start_hour"]
+                end_hour = job["end_hour"]
+                frequency = job["frequency"]
+                days_of_week = job["days_of_week"]
+                method = job["method"]
+                if not (now.hour >= start_hour) or not (now.hour <= end_hour):
+                    continue
+
+                if now.minute % frequency != 0:
+                    continue
+
+                if now.weekday() not in days_of_week:
+                    continue
+
+                if self.is_func_async(method):
+                    await method()
+                else:
+                    method()
+
+            time.sleep(60)
