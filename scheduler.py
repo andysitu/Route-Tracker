@@ -9,7 +9,7 @@ class Scheduler:
         self.jobs: Dict = {}
         self._current_id: int = 0
 
-    def is_func_async(method):
+    def is_func_async(self, method):
         return inspect.iscoroutinefunction(method)
 
     def add_job(
@@ -34,8 +34,8 @@ class Scheduler:
             "end_hour": end_hour,
             "frequency": min_frequency,
         }
-        self.jobs[self.current_id] = new_job
-        self.current_id += 1
+        self.jobs[self._current_id] = new_job
+        self._current_id += 1
 
     def remove_job(self, id: int):
         if int in self.jobs:
