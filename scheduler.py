@@ -52,10 +52,18 @@ class Scheduler:
             for job in self.jobs.values():
                 start_hour = job["start_hour"]
                 end_hour = job["end_hour"]
+                start_minute = job["start_minute"]
+                end_minute = job["end_minute"]
                 frequency = job["frequency"]
                 days_of_week = job["days_of_week"]
                 method = job["method"]
-                if not (now.hour >= start_hour) or not (now.hour <= end_hour):
+                if not (start_hour <= now.hour <= end_hour):
+                    continue
+
+                if now.hour == start_hour and now.minute < start_minute:
+                    continue
+
+                if now.hour == end_hour and now.minute > end_minute:
                     continue
 
                 if now.minute % frequency != 0:
