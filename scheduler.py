@@ -57,19 +57,16 @@ class Scheduler:
                 frequency = job["frequency"]
                 days_of_week = job["days_of_week"]
                 method = job["method"]
+
                 if not (start_hour <= now.hour <= end_hour):
                     continue
-
-                if now.hour == start_hour and now.minute < start_minute:
+                elif now.hour == start_hour and now.minute < start_minute:
                     continue
-
-                if now.hour == end_hour and now.minute > end_minute:
+                elif now.hour == end_hour and now.minute > end_minute:
                     continue
-
-                if now.minute % frequency != 0:
+                elif now.minute % frequency != 0:
                     continue
-
-                if now.weekday() not in days_of_week:
+                elif now.weekday() not in days_of_week:
                     continue
 
                 if self.is_func_async(method):
