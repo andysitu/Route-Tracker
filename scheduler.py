@@ -35,7 +35,9 @@ class Scheduler:
             "method": methodToRun,
             "days_of_week": days_of_week,
             "start_hour": start_hour,
+            "start_minute": start_minute,
             "end_hour": end_hour,
+            "end_minute": end_minute,
             "frequency": min_frequency,
         }
         self.jobs[self._current_id] = new_job
