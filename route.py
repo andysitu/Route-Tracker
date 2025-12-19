@@ -27,9 +27,12 @@ def getDateNames():
     return formatted_date_name, date_string, time_string
 
 
-def getFolderpath():
+def getFolderpath(route_name):
     _, dateString, _ = getDateNames()
-    return f"data/{dateString}"
+    if route_name:
+        return f"data/{route_name}/{dateString}"
+    else:
+        return f"data/{dateString}"
 
 
 # paths = [
@@ -103,7 +106,7 @@ async def compute_route(
             print(f"An error occurred: {ex}")
 
 
-def save_response_to_file(response):
+def save_response_to_file(route_name: str, response):
     formatted_date_name, _, _ = getDateNames()
     if response:
         formatted_date_name, date_string, time_string = getDateNames()
@@ -113,20 +116,23 @@ def save_response_to_file(response):
             "time_string": time_string,
         }
 
-        json_lib.save_json(response, getFolderpath(), f"{formatted_date_name}.json")
+        json_lib.save_json(
+            response, getFolderpath(route_name), f"{formatted_date_name}.json"
+        )
     return response
 
 
 async def save_route_by_address(
+    route_name: str,
     addresses: list[str],
 ):
     response = await compute_route(addresses=addresses)
-    return save_response_to_file(response)
+    return save_response_to_file(route_name, response)
 
 
-async def save_route_by_coordinates(latlangs: list[float]):
+async def save_route_by_coordinates(route_name: str, latlangs: list[float]):
     response = await compute_route(latlangs=latlangs)
-    return save_response_to_file(response)
+    return save_response_to_file(route_name, response)
 
 
 def get_encoded_polyline(response):

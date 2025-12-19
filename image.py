@@ -23,10 +23,10 @@ async def download_image(encoded_polyline):
             print(f"An error occurred while requesting the map: {e}")
 
 
-def save_image(response, formatted_date_name):
+def save_image(route_name: str, response, formatted_date_name):
     if response.status_code == 200:
 
-        folder_path = route.getFolderpath()
+        folder_path = route.getFolderpath(route_name)
 
         filepath = os.path.join(folder_path, f"{formatted_date_name}.png")
 
