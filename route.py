@@ -27,12 +27,15 @@ def getDateNames():
     return formatted_date_name, date_string, time_string
 
 
-def getFolderpath(route_name):
+def get_data_folder_path(route_name, include_date=True):
     _, dateString, _ = getDateNames()
     if route_name:
-        return f"data/{route_name}/{dateString}"
+        path_without_date = f"data/{route_name}"
     else:
-        return f"data/{dateString}"
+        path_without_date = f"data/"
+
+    if include_date:
+        path_without_date += "/" + dateString
 
 
 # paths = [
@@ -117,7 +120,7 @@ def save_response_to_file(route_name: str, response):
         }
 
         json_lib.save_json(
-            response, getFolderpath(route_name), f"{formatted_date_name}.json"
+            response, get_data_folder_path(route_name), f"{formatted_date_name}.json"
         )
     return response
 
