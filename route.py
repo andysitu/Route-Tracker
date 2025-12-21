@@ -37,6 +37,8 @@ def get_data_folder_path(route_name, include_date=True):
     if include_date:
         path_without_date += "/" + dateString
 
+    return path_without_date
+
 
 # paths = [
 #     "routes.duration",
