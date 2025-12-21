@@ -5,6 +5,9 @@ from scheduler import Scheduler
 
 
 async def run_route(route_name, from_address: str, to_address):
+    if not route_name:
+        raise ValueError("route_name is not given for run_route")
+
     route_response = await route.save_route_by_address(
         route_name, [from_address, to_address]
     )
