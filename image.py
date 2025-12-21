@@ -1,6 +1,7 @@
 import httpx
 import os
 import route
+import file_lib
 
 
 async def download_image(encoded_polyline):
@@ -33,3 +34,5 @@ def save_image(route_name: str, response, formatted_date_name):
 
         with open(filepath, "wb") as file:
             file.write(response.content)
+
+        file_lib.save_filename_to_data_list(filepath)
