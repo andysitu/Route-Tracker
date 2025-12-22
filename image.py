@@ -9,6 +9,8 @@ async def download_image(encoded_polyline):
         "https://maps.googleapis.com/maps/api/staticmap?"
         f"size=800x600&"
         f"scale=2&"
+        f"maptype=roadmap&"
+        f"layer=traffic&"
         f"path=color:0x0000FF|weight:5|enc:{encoded_polyline}&"
         f"key={os.environ['GOOGLE_API_KEY']}"
     )
