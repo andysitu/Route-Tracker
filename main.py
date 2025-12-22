@@ -4,9 +4,11 @@ import image
 from scheduler import Scheduler
 
 
-async def run_route(route_name, from_address: str, to_address):
+async def record_route(route_name, from_address: str, to_address):
     if not route_name:
         raise ValueError("route_name is not given for run_route")
+    else:
+        print(f"Recording route {route_name} from {from_address} to {to_address}")
 
     route_response = await route.save_route_by_address(
         route_name, [from_address, to_address]
