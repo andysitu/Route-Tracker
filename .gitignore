@@ -182,4 +182,4 @@ cython_debug/
 
 data/**
 
-auto_run.py
+auto_run_list.py
