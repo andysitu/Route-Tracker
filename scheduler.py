@@ -26,7 +26,7 @@ class Scheduler:
             raise ValueError("Start date cannot be greater than the end date")
         elif start_hour == end_hour and start_minute > end_minute:
             raise ValueError("Start date cannot be greater than the end date")
-        elif min_frequency < 0:
+        elif min_frequency <= 0:
             # Minute accuracy
             # Scheduling might not be accurate enough under a minute
             raise ValueError("Frequency cannot be less than 1")
@@ -48,6 +48,10 @@ class Scheduler:
             del self.jobs[id]
 
     async def run(self):
+        if not self.jobs:
+            print("No jobs given for scheduler")
+            return
+
         while True:
             now = datetime.datetime.now()
 
