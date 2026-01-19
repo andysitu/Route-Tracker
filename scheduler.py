@@ -2,6 +2,7 @@ import time
 import datetime
 from typing import Callable, Dict, List
 import inspect
+from zoneinfo import ZoneInfo
 
 
 class Scheduler:
@@ -21,6 +22,7 @@ class Scheduler:
         end_hour: int,
         end_minute: int,
         min_frequency: int = 1,  # integer per minute frequency
+        time_zone="",
     ) -> None:
         if start_hour > end_hour:
             raise ValueError("Start date cannot be greater than the end date")
@@ -39,6 +41,7 @@ class Scheduler:
             "end_hour": end_hour,
             "end_minute": end_minute,
             "frequency": min_frequency,
+            "time_zone": time_zone,
         }
         self.jobs[self._current_id] = new_job
         self._current_id += 1
@@ -53,8 +56,6 @@ class Scheduler:
             return
 
         while True:
-            now = datetime.datetime.now()
-
             for job in self.jobs.values():
                 start_hour = job["start_hour"]
                 end_hour = job["end_hour"]
@@ -63,6 +64,12 @@ class Scheduler:
                 frequency = job["frequency"]
                 days_of_week = job["days_of_week"]
                 method = job["method"]
+                time_zone = job["time_zone"]
+
+                if time_zone:
+                    now = now = datetime.datetime.now(ZoneInfo(time_zone))
+                else:
+                    now = datetime.datetime.now()
 
                 if not (start_hour <= now.hour <= end_hour):
                     continue

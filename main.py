@@ -49,6 +49,7 @@ async def run_jobs_from_auto_run_list():
         end_hour = job_list[6]
         end_minute = job_list[7]
         frequency = job_list[8]
+        time_zone = job_list[9]
 
         if (
             route_name
@@ -73,6 +74,7 @@ async def run_jobs_from_auto_run_list():
                 end_hour,
                 end_minute,
                 frequency,
+                time_zone,
             )
 
     await s.run()
