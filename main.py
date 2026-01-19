@@ -62,11 +62,11 @@ async def run_jobs_from_auto_run_list():
             and frequency >= 0
         ):
 
-            async def go_to_work():
+            async def run_job():
                 await record_route(route_name, from_address, to_address)
 
             s.add_job(
-                go_to_work,
+                run_job,
                 days,
                 start_hour,
                 start_minute,
