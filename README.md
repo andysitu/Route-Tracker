@@ -6,6 +6,7 @@
 * Authenticate using [google-api-core](https://googleapis.dev/python/google-api-core/latest/auth.html) with Google for localhost
 * Create file `auto_run_list.py` with a list `export_list` containing the routes to be tracked.
 * Create .env file with GOOGLE_API_KEY=""
+* Install tzdata with pip 
 
 ## Notes
 * Create requirements.txt: `pip freeze > requirements.txt`
