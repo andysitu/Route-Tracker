@@ -19,3 +19,7 @@
 ## GCloud Notes
 * Authorize service account to "Full Access" (Not sure if necessary)
    * gcloud compute instances set-service-account YOUR_VM_NAME --zone=YOUR_ZONE --scopes=https://www.googleapis.com/auth/cloud-platform
+
+## Running scheduler
+* With pm2:
+   * `pm2 start main.py --interpreter python3 --name "route-tracker"`
