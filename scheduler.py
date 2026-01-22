@@ -23,6 +23,7 @@ class Scheduler:
         end_minute: int,
         min_frequency: int = 1,  # integer per minute frequency
         time_zone="",
+        args: list = None,
     ) -> None:
         if start_hour > end_hour:
             raise ValueError("Start date cannot be greater than the end date")
@@ -35,6 +36,7 @@ class Scheduler:
 
         new_job = {
             "method": methodToRun,
+            "args": args or [],
             "days_of_week": days_of_week,
             "start_hour": start_hour,
             "start_minute": start_minute,
@@ -64,6 +66,7 @@ class Scheduler:
                 frequency = job["frequency"]
                 days_of_week = job["days_of_week"]
                 method = job["method"]
+                arguments = job["args"]
                 time_zone = job["time_zone"]
 
                 if time_zone:
@@ -83,7 +86,7 @@ class Scheduler:
                     continue
 
                 if self.is_func_async(method):
-                    await method()
+                    await method(*arguments)
                 else:
                     method()
 

@@ -62,8 +62,8 @@ async def run_jobs_from_auto_run_list():
             and end_minute >= 0
             and frequency >= 0
         ):
-
-            async def run_job():
+            # use default arguments to pass values assigned when function was created
+            async def run_job(route_name, from_address, to_address):
                 await record_route(route_name, from_address, to_address)
 
             s.add_job(
@@ -75,6 +75,7 @@ async def run_jobs_from_auto_run_list():
                 end_minute,
                 frequency,
                 time_zone,
+                args=[route_name, from_address, to_address],
             )
 
     await s.run()
