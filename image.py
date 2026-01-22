@@ -5,13 +5,16 @@ import file_lib
 
 
 async def download_image(encoded_polyline):
+    map_id = "60ee7098ad573ec3dad80081"
+
     url = (
         "https://maps.googleapis.com/maps/api/staticmap?"
         f"size=800x600&"
         f"scale=2&"
         f"maptype=roadmap&"
         f"layer=traffic&"
-        f"path=color:0x0000FF|weight:5|enc:{encoded_polyline}&"
+        f"map_id={map_id}&"
+        f"path=color:0x0000FF|weight:3|enc:{encoded_polyline}&"
         f"key={os.environ['GOOGLE_API_KEY']}"
     )
 
