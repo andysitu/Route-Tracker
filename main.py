@@ -6,14 +6,14 @@ from scheduler import Scheduler
 from pathlib import Path
 
 
-async def record_route(route_name, from_address: str, to_address):
+async def record_route(route_name, from_address: str, to_address, time_zone):
     if not route_name:
         raise ValueError("route_name is not given for run_route")
     else:
         print(f"Recording route {route_name} from {from_address} to {to_address}")
 
     route_response = await route.save_route_by_address(
-        route_name, [from_address, to_address]
+        route_name, [from_address, to_address], time_zone
     )
 
     encoded_polyline = route.get_encoded_polyline(route_response)
@@ -63,8 +63,8 @@ async def run_jobs_from_auto_run_list():
             and frequency >= 0
         ):
             # use default arguments to pass values assigned when function was created
-            async def run_job(route_name, from_address, to_address):
-                await record_route(route_name, from_address, to_address)
+            async def run_job(route_name, from_address, to_address, time_zone):
+                await record_route(route_name, from_address, to_address, time_zone)
 
             s.add_job(
                 run_job,
@@ -75,7 +75,7 @@ async def run_jobs_from_auto_run_list():
                 end_minute,
                 frequency,
                 time_zone,
-                args=[route_name, from_address, to_address],
+                args=[route_name, from_address, to_address, time_zone],
             )
 
     await s.run()

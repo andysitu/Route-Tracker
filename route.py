@@ -15,13 +15,19 @@ from google.maps.routing_v2.types import (
 from google.type.latlng_pb2 import LatLng
 from google.protobuf.field_mask_pb2 import FieldMask
 
+from zoneinfo import ZoneInfo
+
 
 load_dotenv()
 
 
-def getDateNames():
-    current = datetime.datetime.now()
-    formatted_date_name = current.strftime("%Y%m%d_%H%M%S")
+def getDateNames(time_zone: str):
+    if time_zone:
+        now = now = datetime.datetime.now(ZoneInfo(time_zone))
+    else:
+        now = datetime.datetime.now()
+
+    formatted_date_name = now.strftime("%Y%m%d_%H%M%S")
     date_string = formatted_date_name.split("_")[0]
     time_string = formatted_date_name.split("_")[1]
     return formatted_date_name, date_string, time_string
@@ -111,10 +117,10 @@ async def compute_route(
             print(f"An error occurred: {ex}")
 
 
-def save_response_to_file(route_name: str, response):
+def save_response_to_file(route_name: str, response, time_zone: str):
     formatted_date_name, _, _ = getDateNames()
     if response:
-        formatted_date_name, date_string, time_string = getDateNames()
+        formatted_date_name, date_string, time_string = getDateNames(time_zone)
         response["file"] = {
             "formatted_date_name": formatted_date_name,
             "date_string": date_string,
@@ -127,17 +133,16 @@ def save_response_to_file(route_name: str, response):
     return response
 
 
-async def save_route_by_address(
-    route_name: str,
-    addresses: list[str],
-):
+async def save_route_by_address(route_name: str, addresses: list[str], time_zone: str):
     response = await compute_route(addresses=addresses)
-    return save_response_to_file(route_name, response)
+    return save_response_to_file(route_name, response, time_zone)
 
 
-async def save_route_by_coordinates(route_name: str, latlangs: list[float]):
+async def save_route_by_coordinates(
+    route_name: str, latlangs: list[float], time_zone: str
+):
     response = await compute_route(latlangs=latlangs)
-    return save_response_to_file(route_name, response)
+    return save_response_to_file(route_name, response, time_zone)
 
 
 def get_encoded_polyline(response):
