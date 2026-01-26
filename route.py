@@ -99,22 +99,18 @@ async def compute_route(
         else:
             mask_string = "*"
 
-        try:
-            response = await client.compute_routes(
-                request=request, metadata=[("x-goog-fieldmask", mask_string)]
-            )
+        response = await client.compute_routes(
+            request=request, metadata=[("x-goog-fieldmask", mask_string)]
+        )
 
-            if response.routes:
-                response_json_str = type(response).to_json(response)
-                response_json = json.loads(response_json_str)
-                response_json["location"] = location
+        if response.routes:
+            response_json_str = type(response).to_json(response)
+            response_json = json.loads(response_json_str)
+            response_json["location"] = location
 
-                return response_json
-            else:
-                print("No routes found")
-
-        except Exception as ex:
-            print(f"An error occurred: {ex}")
+            return response_json
+        else:
+            print("No routes found")
 
 
 def save_response_to_file(route_name: str, response, time_zone: str):

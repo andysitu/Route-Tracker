@@ -59,35 +59,39 @@ class Scheduler:
 
         while True:
             for job in self.jobs.values():
-                start_hour = job["start_hour"]
-                end_hour = job["end_hour"]
-                start_minute = job["start_minute"]
-                end_minute = job["end_minute"]
-                frequency = job["frequency"]
-                days_of_week = job["days_of_week"]
-                method = job["method"]
-                arguments = job["args"]
-                time_zone = job["time_zone"]
+                try:
+                    start_hour = job["start_hour"]
+                    end_hour = job["end_hour"]
+                    start_minute = job["start_minute"]
+                    end_minute = job["end_minute"]
+                    frequency = job["frequency"]
+                    days_of_week = job["days_of_week"]
+                    method = job["method"]
+                    arguments = job["args"]
+                    time_zone = job["time_zone"]
 
-                if time_zone:
-                    now = now = datetime.datetime.now(ZoneInfo(time_zone))
-                else:
-                    now = datetime.datetime.now()
+                    if time_zone:
+                        now = now = datetime.datetime.now(ZoneInfo(time_zone))
+                    else:
+                        now = datetime.datetime.now()
 
-                if not (start_hour <= now.hour <= end_hour):
-                    continue
-                elif now.hour == start_hour and now.minute < start_minute:
-                    continue
-                elif now.hour == end_hour and now.minute > end_minute:
-                    continue
-                elif now.minute % frequency != 0:
-                    continue
-                elif now.weekday() not in days_of_week:
-                    continue
+                    if not (start_hour <= now.hour <= end_hour):
+                        continue
+                    elif now.hour == start_hour and now.minute < start_minute:
+                        continue
+                    elif now.hour == end_hour and now.minute > end_minute:
+                        continue
+                    elif now.minute % frequency != 0:
+                        continue
+                    elif now.weekday() not in days_of_week:
+                        continue
 
-                if self.is_func_async(method):
-                    await method(*arguments)
-                else:
-                    method()
+                    if self.is_func_async(method):
+                        await method(*arguments)
+                    else:
+                        method()
+                except Exception as ex:
+                    print(f"An error occurred: {ex}")
+                    return
 
             time.sleep(60)
