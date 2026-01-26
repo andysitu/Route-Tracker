@@ -118,7 +118,6 @@ async def compute_route(
 
 
 def save_response_to_file(route_name: str, response, time_zone: str):
-    formatted_date_name, _, _ = getDateNames()
     if response:
         formatted_date_name, date_string, time_string = getDateNames(time_zone)
         response["file"] = {
