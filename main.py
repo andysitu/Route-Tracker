@@ -2,6 +2,8 @@ import asyncio
 import route
 import image
 from scheduler import Scheduler
+import datetime
+from zoneinfo import ZoneInfo
 
 from pathlib import Path
 
@@ -10,7 +12,13 @@ async def record_route(route_name, from_address: str, to_address, time_zone):
     if not route_name:
         raise ValueError("route_name is not given for run_route")
     else:
-        print(f"Recording route {route_name} from {from_address} to {to_address}")
+        if time_zone:
+            now = datetime.datetime.now(ZoneInfo(time_zone))
+        else:
+            now = datetime.datetime.now()
+        print(
+            f"Recording route {route_name} from {from_address} to {to_address} on {now}"
+        )
 
     route_response = await route.save_route_by_address(
         route_name, [from_address, to_address], time_zone
