@@ -22,4 +22,4 @@
 
 ## Running scheduler
 * With pm2, run from root dir:
-   * `pm2 start main.py --name "route-tracker" --interpreter ./venv/bin/python`
+   * `pm2 start main.py --name "route-tracker" --interpreter ./venv/bin/python --no-autorestart`
