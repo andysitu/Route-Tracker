@@ -3,8 +3,8 @@ import json
 import route
 
 
-def save_filename_to_data_list(filepath):
-    data_list_folder_path = route.get_data_folder_path(None, False)
+def save_filename_to_data_list(filepath, time_zone: str):
+    data_list_folder_path = route.get_data_folder_path(None, False, time_zone)
 
     list_filepath = os.path.join(data_list_folder_path, "data_list.txt")
 
@@ -12,7 +12,7 @@ def save_filename_to_data_list(filepath):
         file.write(filepath + "\n")
 
 
-def save_json(to_save_json, folder_path: str, filename: str):
+def save_json(to_save_json, folder_path: str, filename: str, time_zone: str):
     # Make sure the folder exists
     os.makedirs(folder_path, exist_ok=True)
 
@@ -24,4 +24,4 @@ def save_json(to_save_json, folder_path: str, filename: str):
     with open(filepath, "w") as file:
         json.dump(to_save_json, file, indent=2)
 
-    save_filename_to_data_list(filepath)
+    save_filename_to_data_list(filepath, time_zone)

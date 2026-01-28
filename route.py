@@ -33,8 +33,8 @@ def getDateNames(time_zone: str):
     return formatted_date_name, date_string, time_string
 
 
-def get_data_folder_path(route_name, include_date=True):
-    _, dateString, _ = getDateNames()
+def get_data_folder_path(route_name, include_date=True, time_zone: str = ""):
+    _, dateString, _ = getDateNames(time_zone)
     if route_name:
         path_without_date = f"data/{route_name}"
     else:
@@ -123,7 +123,10 @@ def save_response_to_file(route_name: str, response, time_zone: str):
         }
 
         file_lib.save_json(
-            response, get_data_folder_path(route_name), f"{formatted_date_name}.json"
+            response,
+            get_data_folder_path(route_name, True, time_zone),
+            f"{formatted_date_name}.json",
+            time_zone,
         )
     return response
 

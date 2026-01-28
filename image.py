@@ -24,14 +24,14 @@ async def download_image(encoded_polyline):
         return response
 
 
-def save_image(route_name: str, response, formatted_date_name):
+def save_image(route_name: str, response, formatted_date_name, time_zone):
     if response.status_code == 200:
 
-        folder_path = route.get_data_folder_path(route_name)
+        folder_path = route.get_data_folder_path(route_name, True, time_zone)
 
         filepath = os.path.join(folder_path, f"{formatted_date_name}.png")
 
         with open(filepath, "wb") as file:
             file.write(response.content)
 
-        file_lib.save_filename_to_data_list(filepath)
+        file_lib.save_filename_to_data_list(filepath, time_zone)
