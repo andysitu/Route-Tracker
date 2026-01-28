@@ -92,6 +92,9 @@ class Scheduler:
                         method()
                 except Exception as ex:
                     print(f"An error occurred: {ex}")
+                    print(
+                        f"Job {start_hour}:{start_minute} to {end_hour}:{end_minute} at {now}"
+                    )
                     return
 
             time.sleep(60)

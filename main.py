@@ -24,12 +24,23 @@ async def record_route(route_name, from_address: str, to_address, time_zone):
         route_name, [from_address, to_address], time_zone
     )
 
+    print(f"Recorded route {route_name} from {from_address} to {to_address} on {now}")
+
     encoded_polyline = route.get_encoded_polyline(route_response)
     response = await image.download_image(encoded_polyline=encoded_polyline)
 
     formatted_date_name = route_response["file"]["formatted_date_name"]
 
-    image.save_image(route_name, response, formatted_date_name=formatted_date_name)
+    image.save_image(
+        route_name,
+        response,
+        formatted_date_name=formatted_date_name,
+        time_zone=time_zone,
+    )
+
+    print(
+        f"Saved map image for {route_name} from {from_address} to {to_address} on {now}"
+    )
 
 
 async def run_jobs_from_auto_run_list():
